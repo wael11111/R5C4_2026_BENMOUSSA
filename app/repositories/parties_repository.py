@@ -6,14 +6,15 @@ class PartiesRepository:
     def __init__(self, db_path):
         self.db_path = db_path
 
-    def get_parties(self):
+    def get_parties(self, limit=20, offset=0):
         connexion = sqlite3.connect(self.db_path)
         connexion.row_factory = sqlite3.Row
 
         cursor = connexion.execute("""
             SELECT *
             FROM parties
-        """)
+            LIMIT ? OFFSET ?
+        """, (limit, offset))
 
         parties = cursor.fetchall()
 

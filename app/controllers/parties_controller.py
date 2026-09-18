@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify
-
+from flask import Blueprint, jsonify, request
 from app.services.parties_service import PartiesService
 
 
@@ -10,8 +9,10 @@ def create_controller(db_path):
 
     @controller.route("/api/v1/parties", methods=["GET"])
     def get_parties():
-        parties = service.get_parties()
+        limit = request.args.get("limit", default=20, type=int)
+        offset = request.args.get("offset", default=0, type=int)
 
+        parties = service.get_parties(limit, offset)
         data = [
             {
                 "id": partie["id"],
@@ -27,8 +28,8 @@ def create_controller(db_path):
         return jsonify({
             "data": data,
             "total": len(data),
-            "limit": 20,
-            "offset": 0
+            "limit": limit,
+            "offset": offset
         })
 
     return controller
