@@ -18,6 +18,13 @@ class PartiesRepository:
 
         parties = cursor.fetchall()
 
+        cursor = connexion.execute("""
+            SELECT COUNT(*)
+            FROM parties
+        """)
+
+        total = cursor.fetchone()[0]
+
         connexion.close()
 
-        return parties
+        return parties, total

@@ -12,7 +12,7 @@ def create_controller(db_path):
         limit = request.args.get("limit", default=20, type=int)
         offset = request.args.get("offset", default=0, type=int)
 
-        parties = service.get_parties(limit, offset)
+        parties, total = service.get_parties(limit, offset)
         data = [
             {
                 "id": partie["id"],
@@ -27,7 +27,7 @@ def create_controller(db_path):
 
         return jsonify({
             "data": data,
-            "total": len(data),
+            "total": total,
             "limit": limit,
             "offset": offset
         })
